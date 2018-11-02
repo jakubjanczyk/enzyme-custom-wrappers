@@ -2,6 +2,8 @@
 This is a small library aiming at promoting and simplifying writing of integration tests using Enzyme library.
 As a name suggests, it let's you create your own wrappers for accessing components (or their elements) and to use it on top of pure Enzyme.
 
+**It's a way to create clean, readable and maintainable Enzyme tests with minimal effort.**
+
 ## Getting Started
 
 To start using this library just install it from NPM by running following command:
