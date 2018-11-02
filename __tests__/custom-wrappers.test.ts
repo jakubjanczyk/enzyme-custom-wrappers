@@ -2,20 +2,16 @@ import TestComponent from './TestComponent';
 import {createComponentWrapperFor, mountWithCustomWrappers, Wrapper} from '../src/custom-wrappers';
 
 describe('Custom Wrappers', () => {
-    interface ButtonWrapper {
-        clickTestButton: () => void
-    }
+    type ButtonWrapper = ReturnType<typeof wrapperForButton>;
 
-    interface ContainerWrapper {
-        findSecondSpan: () => Wrapper
-    }
+    type ContainerWrapper = ReturnType<typeof wrapperForContainer>
 
-    const wrapperForButton = (component: Wrapper): ButtonWrapper => {
+    const wrapperForButton = (component: Wrapper) => {
         return {
             clickTestButton: () => component.findByText('Test Button').click()
         }
     };
-    const wrapperForContainer = (component: Wrapper): ContainerWrapper => {
+    const wrapperForContainer = (component: Wrapper) => {
         return {
             findSecondSpan: () => component.findByText('Test Button').click()
         }
@@ -88,17 +84,10 @@ describe('Custom Wrappers', () => {
     });
 
     describe('using raw createComponentWrapperFor for nested wrapper', () => {
-        interface NestedContainerWrapper {
-            clickNestedButton: () => void
-            allActiveSpansDataValues: () => string[]
-        }
+        type NestedContainerWrapper = ReturnType<typeof wrapperForNestedContainer>
+        type SpanWrapper = ReturnType<typeof wrapperForSpans>
 
-        interface SpanWrapper {
-            isActive: () => boolean
-            dataValue: () => string
-        }
-
-        const wrapperForSpans = (component: Wrapper): SpanWrapper => {
+        const wrapperForSpans = (component: Wrapper) => {
             return {
                 dataValue: () => component.prop('data-value') as string,
                 isActive: () => component.prop('data-active') as boolean
@@ -106,7 +95,7 @@ describe('Custom Wrappers', () => {
         };
         const customButtonWrapper = createComponentWrapperFor<ButtonWrapper>(wrapperForButton);
         const spanWrapper = createComponentWrapperFor<SpanWrapper>(wrapperForSpans);
-        const wrapperForNestedContainer = (component: Wrapper): NestedContainerWrapper => {
+        const wrapperForNestedContainer = (component: Wrapper) => {
             return {
                 clickNestedButton: () => customButtonWrapper(component).clickTestButton(),
                 allActiveSpansDataValues: () => component.find('span')
@@ -132,24 +121,16 @@ describe('Custom Wrappers', () => {
     });
 
     describe('using namespaces', () => {
-        interface DataValue {
-            dataValue: () => string
-        }
+        type ButtonWrapper = ReturnType<typeof wrapperForTestButton>;
+        type FirstSpanWrapper = ReturnType<typeof wrapperForFirstSpan>;
 
-        interface FirstSpanWrapper {
-            firstSpan: DataValue
-        }
-
-        interface ButtonWrapper {
-            testButton: DataValue
-        }
-
-        const wrapperForFirstSpan = (component: Wrapper): FirstSpanWrapper => ({
+        const wrapperForFirstSpan = (component: Wrapper) => ({
             firstSpan: {
                 dataValue: () => component.find('span').first().prop('data-value') as string
             }
         });
-        const wrapperForTestButton = (component: Wrapper): ButtonWrapper => ({
+
+        const wrapperForTestButton = (component: Wrapper) => ({
             testButton: {
                 dataValue: () => component.findByDataTest('test-button').prop('data-value') as string
             }
