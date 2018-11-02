@@ -1,6 +1,7 @@
 import * as React from 'react';
 
-export default ({onClick = jest.fn}: {onClick?: (event: any) => void} = {}) => (
+type EventFunction = (event: any) => void;
+export default ({onClick = jest.fn}: {onClick?: EventFunction} = {}) => (
     <div className='test-container' data-test='test-container-data-test'>
         <div data-test='spans-container'>
             <span data-value='Span 1' data-active>Span 1</span>

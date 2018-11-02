@@ -7,6 +7,8 @@ export interface CommonWrapper {
     findByDataTest: (dataTest: string) => Wrapper;
     click: () => Wrapper;
     blur: () => Wrapper;
+    focus: () => Wrapper;
+    typeText: (text: string) => Wrapper;
 }
 
 export interface Wrapper extends CommonWrapper, ReactWrapper {
@@ -43,6 +45,12 @@ const commonWrapper: (CommonWrapper | any) = {
     },
     blur() {
         return this.simulate('blur');
+    },
+    focus() {
+        return this.simulate('focus');
+    },
+    typeText(text: string) {
+        return this.simulate('change', {target: {value: text}});
     }
 };
 

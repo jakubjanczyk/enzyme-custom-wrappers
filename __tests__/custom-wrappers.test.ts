@@ -3,63 +3,20 @@ import {createComponentWrapperFor, mountWithCustomWrappers, Wrapper} from '../sr
 
 describe('Custom Wrappers', () => {
     type ButtonWrapper = ReturnType<typeof wrapperForButton>;
-
     type ContainerWrapper = ReturnType<typeof wrapperForContainer>
 
-    const wrapperForButton = (component: Wrapper) => {
-        return {
-            clickTestButton: () => component.findByText('Test Button').click()
-        }
-    };
-    const wrapperForContainer = (component: Wrapper) => {
-        return {
-            findSecondSpan: () => component.findByText('Test Button').click()
-        }
-    };
+    const wrapperForButton = (component: Wrapper) => ({
+        clickTestButton: () => component.findByText('Test Button').click()
+    });
+    const wrapperForContainer = (component: Wrapper) => ({
+        findSecondSpan: () => component.findByText('Test Button').click()
+    });
 
     describe('mountWithCustomWrappers', () => {
         it('should preserve basic enzyme Wrapper methods when no custom wrapper provided', () => {
             const component = mountWithCustomWrappers(TestComponent());
 
             expect(component.find('.test-container').exists()).toBeTruthy();
-        });
-
-        describe('custom methods', () => {
-            it('should findByClass', () => {
-                const component = mountWithCustomWrappers(TestComponent());
-
-                expect(component.findByClass('test-container').exists()).toBeTruthy();
-            });
-
-            it('should findByDataTest', () => {
-                const component = mountWithCustomWrappers(TestComponent());
-
-                expect(component.findByDataTest('test-container-data-test').exists()).toBeTruthy();
-            });
-
-            it('should findByText', () => {
-                const component = mountWithCustomWrappers(TestComponent());
-
-                expect(component.findByText('Span 2')).toHaveLength(1);
-            });
-
-            it('should allow to click on element, when found by custom method', () => {
-                const onClick = jest.fn();
-                const component = mountWithCustomWrappers(TestComponent({onClick}));
-
-                component.findByText('Test Button').click();
-
-                expect(onClick).toHaveBeenCalled();
-            });
-
-            it('should allow to click on element, when found by basic Enzyme method', () => {
-                const onClick = jest.fn();
-                const component = mountWithCustomWrappers(TestComponent({onClick}));
-
-                (component.find('[data-test="test-button"]') as Wrapper).click();
-
-                expect(onClick).toHaveBeenCalled();
-            });
         });
 
         it('should add custom method when just one wrapper provided', () => {
@@ -87,23 +44,19 @@ describe('Custom Wrappers', () => {
         type NestedContainerWrapper = ReturnType<typeof wrapperForNestedContainer>
         type SpanWrapper = ReturnType<typeof wrapperForSpans>
 
-        const wrapperForSpans = (component: Wrapper) => {
-            return {
-                dataValue: () => component.prop('data-value') as string,
-                isActive: () => component.prop('data-active') as boolean
-            }
-        };
+        const wrapperForSpans = (component: Wrapper) => ({
+            dataValue: () => component.prop('data-value') as string,
+            isActive: () => component.prop('data-active') as boolean
+        });
         const customButtonWrapper = createComponentWrapperFor<ButtonWrapper>(wrapperForButton);
         const spanWrapper = createComponentWrapperFor<SpanWrapper>(wrapperForSpans);
-        const wrapperForNestedContainer = (component: Wrapper) => {
-            return {
-                clickNestedButton: () => customButtonWrapper(component).clickTestButton(),
-                allActiveSpansDataValues: () => component.find('span')
-                    .map(el => spanWrapper(el))
-                    .filter(el => el.isActive())
-                    .map(el => el.dataValue())
-            }
-        };
+        const wrapperForNestedContainer = (component: Wrapper) => ({
+            clickNestedButton: () => customButtonWrapper(component).clickTestButton(),
+            allActiveSpansDataValues: () => component.find('span')
+                .map(el => spanWrapper(el))
+                .filter(el => el.isActive())
+                .map(el => el.dataValue())
+        });
         it('should allow to nest wrapper inside other wrappers', () => {
             const onClick = jest.fn();
             const component = mountWithCustomWrappers<NestedContainerWrapper>(TestComponent({onClick}), wrapperForNestedContainer);
