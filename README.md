@@ -1,5 +1,5 @@
 # enzyme-custom-wrappers
-This is a small library mainly aiming at promoting and simplifying writing of integration tests using Enzyme library.
+This is a small library aiming at promoting and simplifying writing of integration tests using Enzyme library.
 As a name suggests, it let's you create your own wrappers for accessing components (or their elements) and to use it on top of pure Enzyme.
 
 ## Getting Started
@@ -147,7 +147,7 @@ it('should change text of button after it is clicked', () => {
 // in my-button-wrapper.js file:
 export const wrapperForMyButton = (component) => ({
   clickMyButton: () => component.findByDataTest('my-button').click(), // findByDataTest is another common method we added
-  myButtonText: () => component.findByDataTest('my-button').text()
+  myButtonText: () => component.find('[data-test="my-button"]').text() // equivalent of findByDataTest
 })
 ```
 
@@ -240,5 +240,77 @@ export const wrapperForMySecondButton = (component) => ({
 });
 ```
 
-
 ## API
+
+###`mountWithCustomWrappers`
+This is a most useful function that allows you to mount any component, with any number of wrappers that are needed:
+
+```javascript
+mountWithCustomWrappers(node, ...wrappers)
+```
+
+It returns object that contains all methods available on provided wrappers.
+Moreover, base Enzyme wrapper methods are not lost, so it is possible to use them as well.
+This function basically enhances Enzyme wrapper with custom methods.
+
+Additionally, few common, built-in methods are always available, when using this function. Please see TODO.
+
+###`createComponentWrapperFor`
+This function is useful when nesting wrappers inside other wrappers (please see this example).
+
+Apart from this, there are few reasons to use it when mounting a component, prefer `mountWithCustomWrappers` instead.
+
+```javascript
+mountWithCustomWrappers(...wrappers)(mountedComponent)
+```
+
+### Common built-in methods
+There are few built-in methods you can use when mounting component via `mountWithCustomWrappers` function, and that do not require any custom wrapper to be present.
+
+| Method  | Description |
+| ------------- | ------------- |
+| `.findByText`  | Finds element that contains exactly the text provided. As of the moment, there are no RegExp available  |
+| `.findByDataTest`  | Finds element that has provided value for a custom attribute 'data-test'  |
+| `.findByClass`  | Finds element that contains the provided class name. As of the moment, there are no RegExp available  |
+| `.click`  | Clicks on a given element (equivalent of `.simulate('click')`  |
+| `.blur`  | Blurs given element (equivalent of `.simulate('blur')`  |
+| `.focus`  | Focuses given element (equivalent of `.simulate('focus')`  |
+| `.typeText`  | Types text for a given input (equivalent of `.simulate('change', {target: {value: value}})`  |
+
+More might be added in the future, if you need new one, raise an issue or add it yourself via pull request.
+
+## Using with TypeScript
+This library is written in TypeScript, so is fully compatible. However, due to typing it is being used a bit differently than in pure JavaScript:
+```typescript
+// in our test file
+import {mountWithCustomWrappers} from "enzyme-custom-wrappers";
+
+it('should add new user to the list', () => {
+    const component = mountWithCustomWrappers<UserAddWrapper & UsersListWrapper>(<UsersPage />, wrapperForUserAdd, wrapperForUsersList);
+
+    component.addUser('John Doe');
+
+    expect(component.allUsers()).toEqual(['John Doe'])
+});
+
+// in user-add-wrapper.js file:
+export type UserAddWrapper = ReturnType<typeof wrapperForUserAdd>
+export const wrapperForUserAdd = (component) => ({
+  addUser: (userName) => {
+    component.find('.add-user').find('.new-user-name-input').simulate('change', {target: {value: userName}});
+    component.find('.add-user-button').simulate('click');
+  }
+})
+
+// in users-list-wrapper.js file:
+export type UsersListWrapper = ReturnType<typeof wrapperForUsersList>
+export const wrapperForUsersList = (component) => ({
+  allUsers: () => component.find('.users-list').find('.user-row').find('.user-name').map(el => el.text())
+})
+```
+
+There is one difference, comparing to JavaScript. `mountWithCustomWrappers` is a generic function and requires 
+to provide intersection of every wrapper type. In this case it's UserAddWrapper and UsersListWrapper.
+It's necessary to be able to use methods without warning from TypeScript compiler about unknown properties.
+
+In this example I used `ReturnType` built-in type, but you are free to use any approach suitable, as long as it provides full wrapper definition.
