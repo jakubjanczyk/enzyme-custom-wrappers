@@ -253,7 +253,9 @@ It returns object that contains all methods available on provided wrappers.
 Moreover, base Enzyme wrapper methods are not lost, so it is possible to use them as well.
 This function basically enhances Enzyme wrapper with custom methods.
 
-Additionally, few common, built-in methods are always available, when using this function. Please see TODO.
+All wrappers that need to be provided here are function that takes component as an argument and returns a simple JavaScript object.
+One thing to note here is that this component is not pure Enzyme's React Wrapper, but already enhanced one, with all common, built-in methods available,
+and those can be used both inside your custom methods, as well as outside, in your tests.
 
 ### createComponentWrapperFor
 This function is useful when nesting wrappers inside other wrappers (please see this example).
