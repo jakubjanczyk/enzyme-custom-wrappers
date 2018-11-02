@@ -273,13 +273,22 @@ There are few built-in methods you can use when mounting component via `mountWit
 
 | Method  | Description |
 | ------------- | ------------- |
-| `.findByText`  | Finds element that contains exactly the text provided. As of the moment, there are no RegExp available  |
-| `.findByDataTest`  | Finds element that has provided value for a custom attribute 'data-test'  |
-| `.findByClass`  | Finds element that contains the provided class name. As of the moment, there are no RegExp available  |
-| `.click`  | Clicks on a given element (equivalent of `.simulate('click')`  |
-| `.blur`  | Blurs given element (equivalent of `.simulate('blur')`  |
-| `.focus`  | Focuses given element (equivalent of `.simulate('focus')`  |
-| `.typeText`  | Types text for a given input (equivalent of `.simulate('change', {target: {value: value}})`  |
+| `.findByText(text: string)`  | Finds element that contains exactly the text provided. As of the moment, there are no RegExp available  |
+| `.findByDataTest(dataTest: string)`  | Finds element that has provided value for a custom attribute 'data-test'  |
+| `.findByClass(class: string)`  | Finds element that contains the provided class name. As of the moment, there are no RegExp available  |
+| `.click()`  | Clicks on a given element (equivalent of `.simulate('click')`  |
+| `.blur()`  | Blurs given element (equivalent of `.simulate('blur')`  |
+| `.focus()`  | Focuses given element (equivalent of `.simulate('focus')`  |
+| `.typeText(text: string)`  | Types text for a given input (equivalent of `.simulate('change', {target: {value: value}})`  |
+
+Similarly as with Enzyme Wrapper functions, each one returns object that contains the same functions. So you can easily chain them:
+```javascript
+component
+  .findByClass('some-class')
+  .findByDataTest('data-test')
+  .find('.some-other-class') // even Enzyme's core function
+  .click()
+```
 
 More might be added in the future, if you need new one, raise an issue or add it yourself via pull request.
 
