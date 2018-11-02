@@ -242,7 +242,7 @@ export const wrapperForMySecondButton = (component) => ({
 
 ## API
 
-###`mountWithCustomWrappers`
+### mountWithCustomWrappers
 This is a most useful function that allows you to mount any component, with any number of wrappers that are needed:
 
 ```javascript
@@ -255,7 +255,7 @@ This function basically enhances Enzyme wrapper with custom methods.
 
 Additionally, few common, built-in methods are always available, when using this function. Please see TODO.
 
-###`createComponentWrapperFor`
+### createComponentWrapperFor
 This function is useful when nesting wrappers inside other wrappers (please see this example).
 
 Apart from this, there are few reasons to use it when mounting a component, prefer `mountWithCustomWrappers` instead.
