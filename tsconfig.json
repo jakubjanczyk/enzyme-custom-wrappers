@@ -1,9 +1,9 @@
 {
   "compilerOptions": {
-    "outDir": "./dist",
-    "module": "esnext",
+    "outDir": "dist",
+    "module": "commonjs",
     "target": "es5",
-    "lib": ["es6", "es2017", "dom"],
+    "lib": ["es6", "es2015", "es2017", "dom"],
     "sourceMap": true,
     "jsx": "react",
     "moduleResolution": "node",
@@ -19,9 +19,13 @@
     "declarationMap": true,
     "typeRoots": ["./node_modules/@types"]
   },
+  "files": [
+    "./src/custom-wrappers.ts"
+  ],
   "exclude": [
     "node_modules",
     "src/setupTests.ts",
-    "__tests__"
+    "__tests__",
+    "utils"
   ]
 }

@@ -1,5 +1,5 @@
-import TestComponent from './TestComponent';
 import {createComponentWrapperFor, mountWithCustomWrappers, Wrapper} from '../src/custom-wrappers';
+import TestComponent from "../utils/TestComponent";
 
 describe('Custom Wrappers', () => {
     type ButtonWrapper = ReturnType<typeof wrapperForButton>;

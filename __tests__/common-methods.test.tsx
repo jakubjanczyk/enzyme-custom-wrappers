@@ -1,6 +1,6 @@
 import {mountWithCustomWrappers, Wrapper} from "../src/custom-wrappers";
-import TestComponent from "./TestComponent";
 import * as React from "react";
+import TestComponent from "../utils/TestComponent";
 
 describe('common methods', () => {
     it('should findByClass', () => {

@@ -2,19 +2,31 @@
   "name": "enzyme-custom-wrappers",
   "version": "1.0.0",
   "description": "",
-  "main": "dist/custom-wrappers.js",
+  "main": "dist/custom-wrappers",
+  "types": "dist/custom-wrappers",
   "scripts": {
     "test": "jest",
-    "build": "rimraf dist && tsc"
+    "build": "rimraf dist && tsc",
+    "prepublishOnly": "npm test"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/jakubjanczyk/enzyme-custom-wrappers.git"
   },
   "author": "Jakub Janczyk",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/jakubjanczyk/enzyme-custom-wrappers/issues"
+  },
+  "keywords": [
+    "tdd",
+    "testing",
+    "test",
+    "react",
+    "enzyme"
+  ],
+  "publishConfig": {
+    "access": "public"
   },
   "homepage": "https://github.com/jakubjanczyk/enzyme-custom-wrappers#readme",
   "peerDependencies": {
