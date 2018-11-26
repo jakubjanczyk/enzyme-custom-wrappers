@@ -1,6 +1,6 @@
 {
   "name": "enzyme-custom-wrappers",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "",
   "main": "dist/custom-wrappers.js",
   "scripts": {
