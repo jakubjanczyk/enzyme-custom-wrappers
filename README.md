@@ -1,8 +1,10 @@
 # enzyme-custom-wrappers
-This is a small library aiming at promoting and simplifying writing of integration tests using Enzyme library.
+This is a small library that promotes and simplifies writing of integration tests using Enzyme library.
 As a name suggests, it let's you create your own wrappers for accessing components (or their elements) and to use it on top of pure Enzyme.
 
 **It's a way to create clean, readable and maintainable Enzyme tests with minimal effort.**
+
+Check this blog post for short introduction: https://blog.pragmatists.com/click-your-element-how-to-make-enzyme-tests-cleaner-3e7ad21c2be0
 
 ## Getting Started
 
